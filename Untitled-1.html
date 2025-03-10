@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Blur on Scroll</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      overflow: hidden;
+    }
+
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
+
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+
+    // Set initial shadow properties
+    context.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    context.shadowBlur = 10;  // Initial blur
+    context.shadowOffsetX = 10;
+    context.shadowOffsetY = 10;
+
+    // Draw a rectangle with shadow
+    function drawRectangle() {
+      context.clearRect(0, 0, canvas.width, canvas.height); // Clear previous drawings
+      context.fillStyle = 'blue';   // Rectangle fill color
+      context.fillRect(50, 50, 200, 150); // Draw the rectangle
+    }
+
+    // Draw the initial rectangle
+    drawRectangle();
+
+    // Listen for the scroll event to adjust shadow blur
+    canvas.addEventListener('wheel', function(event) {
+      // Adjust shadow blur based on scroll direction
+      if (event.deltaY > 0) {
+        // Scroll down, increase blur
+        context.shadowBlur += 5;
+      } else {
+        // Scroll up, decrease blur (but not below 0)
+        context.shadowBlur = Math.max(0, context.shadowBlur - 5);
+      }
+      
+      // Redraw the rectangle with the updated shadow blur
+      drawRectangle();
+      
+      // Prevent default scrolling behavior
+      event.preventDefault();
+    });
+  </script>
+</body>
+</html>
